@@ -1,0 +1,9 @@
+#!/bin/bash
+#SBATCH --job-name=#####_name
+#SBATCH --ntasks=#####_np
+#SBATCH --partition=#####_super
+#SBATCH --time=#####_hours
+cd $SLURM_SUBMIT_DIR
+#time mpirun -np $SLURM_NTASKS /home/jhonatan.aguirre/SAM6.11.7/SAM_ADV_MPDATA_SGS_TKE_RAD_CAM_MICRO_SAM1MOM >> /home/jhonatan.aguirre/SAM6.11.7/dados_TESTE.out 
+#mpirun -np $SLURM_NTASKS #####_loc/SAM_ADV_MPDATA_SGS_TKE_RAD_CAM_MICRO_M2005 >> #####_loc/dados_#####_name.out 
+mpirun -np $SLURM_NTASKS #####_loc/SAM_ADV_MPDATA_SGS_TKE_RAD_CAM_MICRO_#####_MICRO >> #####_loc/dados_#####_name.out 

@@ -1,0 +1,231 @@
+&MICRO_M2005
+douse_reffc     = .true.
+dopredictNc     = .true.
+!!real, public :: Nc0 = 100. ! specified cloud droplet number conc (#/cm3)
+Nc0= #####_NC0
+!continental suggestion from module_mp_graupel 
+ccnconst = 1000.0,
+ccnexpnt = 0.5,
+/
+
+
+&MICRO_THOMPSON
+doicemicro= .true.,
+doaerosols= .false.,
+!!!doisotopes= .false.,
+!prescribed droplet number concentration (#/cm3)
+Nc0       = #####_NC0,
+/
+
+&SGS_TKE
+dosmagor = .true. 
+!tke1.5
+!dosmagor = .false. 
+/ 
+
+&PARAMETERS
+
+nrestart = !!!!!restart,
+
+!!!!!!if .true., a separate restart file for each MPI task will be written
+restart_sep = .false.,
+
+
+
+!!!!skip writing restart files nrestart_skip times. By default (nrestart_skip=0), the restart files will be written every time the horizontally mean statistics file is updated (see nstat parameter); however, it may be inefficient (slow) if the statistics file (written to OUT_STAT directory) is written often and the domain is large. Therefore, this parameters allows one to skip writing the restart files. For example, nrestart_skip=11 will write the restart every 12th time the statistics file is written. At the end of the run, the restart will be always written regardless of the value of this parameter.
+
+!nrestart_skip=100
+nrestart_skip=50
+
+
+
+!Type of perturbation 
+!defauld=0
+!Bomex=5 
+!ARM_SGP=4 
+perturb_type = 5, 
+
+!!!!!if .true., all the 2D and 3D output will be written separately for each MPI
+!!!!!process, that is separately for each subdomain. This is done for speed when
+!!!!!massively parallel computers are used to avoid communication bottleneck.
+output_sep = .false.,
+
+
+LES_S 	 = .true.,
+
+!!!!!!!if .true., the surface is the land.
+LAND  = .true.,
+
+SLM   = .false.,
+
+!!!!!!!!if .true., do subgrid-scale (SGS) parameterization.
+dosgs		= .true.,
+
+!!!!!!!!if .true., damp gravity waves at the domain top
+dodamping 	= .true.,
+
+!!!!!!!! if .true., maintain the temp and vapor gradient at the domain top
+doupperbound  	= .true.,
+
+
+!!!!!!!! if .true., allow cloud formation
+docloud 	= .true.,
+
+!!!!!!! if .true., allow precipitation
+doprecip 	= .true., 
+
+dolongwave	= .true.,
+
+doshortwave	= .true.,
+
+!!!!!!!!if .true., compute surface fluxes
+dosurface 	= .true.,
+
+!!!!!!!!if .true., the large-scale forcing from the lsf file will be applied
+dolargescale 	= .true.,
+
+doradforcing   	= .false.,
+
+!!!!!!!!if .true., the surface forcing will be read from sfc file
+!!!!!!!!!! dosfcforcing cannot be set to T when SLM
+dosfcforcing   	= .true.,
+
+!!modified from shallow_03-05_prescribed
+docoriolis 	= .true.,
+
+!!!!!!!!!! if .true., nudge horizontal mean u and v to the specified in lsf (if dolargescale=.true.) or snd files
+donudging_uv   	= .false.,
+
+!!!!!!!!!if .true., nudge both horizontal mean t and q to specified in snd file
+!Whit it, the observate profile is forced.
+!donudging_tq   	= .false.,
+
+
+!Note:LBA True False prescrebed flux and calculate tau 
+!Too prescribed make it True
+!!!!!!!!!!latent heat, sensible heat, and momentum (unless SFC_TAU_FLX=.false.) 
+!!!!!!!!!!fluxes are prescribed (.true.) or computed.(.false.) 
+!!!!!!!!!!If .true., the prescribed fluxes will be read from sfc file if dosfcforcing=.true.,
+!!!!!!!!!!or set by fluxt0 (sensible flux) fluxq0 (latent) in W/m2, and tau0 in m2/s2.
+SFC_FLX_FXD    	= .true.,
+
+!Too prescribed make it True
+!!!!!!!!!!! momentum fluxes are prescribed (.true.) or computed.(.false.) 
+!!!!!!!!!!!If .true., the prescribed flux will be read from sfc 
+!!!!!!!!!!!file if dosfcforcing=.true., or set by tau0 namelist parameter otherwise in m2/s2.
+SFC_TAU_FXD    = .false.,
+
+!!!!!!!!!! nudging time-scale for uv and for tq if tautqls is not set
+tauls = 108000,
+
+nrad 	= 60,
+
+!!!!!!!!!!longituide (degrees); negative for west and positive for east from the Greenwich meridian
+longitude0 = -60,
+
+!!!!!!!!!latitude (degrees); positive for North, negative for South.
+latitude0  = -3.15,
+
+doseasons  = .true.,
+
+dx = 	100.,
+dy = 	100.,
+
+!Each 3 hours is the forcing, 0.125 
+
+!Note: It is important to note 
+!that if the stable boundary layer 
+!must be simulated the size of 
+!the vortex is very small, due that the structures 
+!are small, them the size of the computational mesh 
+!must be very fine to capture the transition 
+!to unstable BL. Therefore the similation can be 
+!initializated after tthe transition, after the sun 
+!rise.  
+
+day0		= !!!!!day0,
+caseid 		= '!!!!!caseid',
+
+dt 		= 1.0,
+
+!Note that the time to beging the experiment is important
+!Oscilation apper in Q1 when the beginint time is 6 hours  and 
+!when the vertical coordiante is short, must be 14 km approximately
+
+
+!16hours,1.0
+nstop 	= 57600,
+!nstop 	= 54000,
+
+!frequency of short printouts (in time steps) performed during the execution.
+!By default, the printing is done to the standard output.
+!The printouts contain minimum and maximum values of various fields among some other information. 
+
+!1.0 seg
+!6 per hour/10 minu
+nprint	= 600,
+nstat 	= 600,
+
+!!!!!!!!!!!number of samples collected over the nstat steps
+! 1 minuto
+nstatfrq= 10,
+
+
+!!!!!!!!!! if .true., core (suffix: COR) and downdraft core (suffix: CDN) averages will be outputted to *.stat file. Note that the number of fields can be quite large and would increase the stat-file size considerably.
+
+doSAMconditionals = .true., 
+
+!!!!!!!!!! if .true., cloudy updraft (suffix: SUP), cloudy downdraft (suffix: SDN) and cloud-free (suffix: ENV for environment) averages will also be output tp *.stat file. The threshold for cloud is 10^(-5) kg/kg, so that there may be small amounts of cloud water and ice in the environmental air. Note that the number of fields can be quite large and would increase the stat-file size considerably.
+
+dosatupdnconditionals = .true., 
+
+nsave2D		= 9999600,
+nsave2Dstart	= 99990000, 
+nsave2Dend	= 999164000,
+save2Davg 	= .true.
+
+
+!!frequency of writing 3D snapshots in time steps.
+nsave3D		= 99997200,
+!!the time step to start writing 3D snapshots. If this timestep is larger
+!!than the nstop parameter, no 3-D output will be written.
+nsave3Dstart	= 9997200,
+nsave3Dend	= 999999,
+!save in binary format
+save3Dbin      	= .false.
+
+/ 
+&SLM
+landtype0=1, 
+LAI0=7.0,
+st0=297.0,
+sw0=0.5,
+/
+
+
+!!!!&MICRO_M2005
+!!!! doicemicro       = .true.,
+!!!! dograupel        = .true.,
+!!!! dohail           = .false.,
+!!!! dosb_warm_rain   = .false.,
+!!!! dopredictnc      = .true.,
+!!!! dospecifyaerosol = .true.,
+!!!! dosubgridw       = .false.,
+!!!! doarcticicenucl  = .false.,
+!!!! docloudedgeactivation = .true.,
+!!!! nc0 = 350.0,
+!!!! ccnconst = 120.0,
+!!!! ccnexpnt = 0.4,
+!!!! aer_rm1  = 0.2,
+!!!! aer_rm2  = 0.7,
+!!!! aer_n1   = 207.0,
+!!!! aer_n2   = 8.5,
+!!!! aer_sig1 = 1.5,
+!!!! aer_sig2 = 2.45,
+!!!! dofix_pgam = .false.,
+!!!! pgam_fixed = 5.0,
+!!!! douse_reffc = .false.,
+!!!! douse_reffi = .false.
+!!!!/
+
+
