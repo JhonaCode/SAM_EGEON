@@ -154,8 +154,8 @@ dt 		= 1.0,
 
 
 !16hours,1.0
-nstop 	= 57600,
-!nstop 	= 54000,
+!nstop 	= 57600,
+nstop 	= !!!!!nstop,
 
 !frequency of short printouts (in time steps) performed during the execution.
 !By default, the printing is done to the standard output.
